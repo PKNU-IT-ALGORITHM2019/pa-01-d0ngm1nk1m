@@ -38,7 +38,34 @@ public class Work01 {
             else if(command.equals("find")) {
                 word = keyboard.next();
                 int num = find(0,count-1,word);
-                System.out.println(voca[num]);
+                if(voca[num].equalsIgnoreCase(word)) {
+                    int buf = num;
+                    int k = 0;
+                    while(voca[buf].equalsIgnoreCase(word)) {
+                        if(buf == 0)
+                            break;
+                        buf--;
+                    }
+                    
+                    if(buf == 0)
+                        num = buf;
+                    else
+                        num = ++buf;
+                    
+                    while(voca[buf].equalsIgnoreCase(word)) {
+                        k++;
+                        buf++;
+                    }
+                    System.out.println("Found " + k + " items.");
+                    for(int i = 0; i < k; i++)
+                        System.out.println(voca[num+i] + " " + part[num+i] + " " + sub[num+i]);
+                }
+                else {
+                    System.out.println("Not found.");
+                    System.out.println(voca[num] + " " + part[num]);
+                    System.out.println("- - -");
+                    System.out.println(voca[num+1] + " " + part[num+1]);
+                }
             }
             else if(command.equals("exit"))
                 break;
@@ -82,8 +109,8 @@ public class Work01 {
     public static int find(int begin, int end, String word2) {
         
         int middle = (begin + end)/2;
-        if(end <= begin)
-            return middle;
+        if(end < begin)
+            return end;
         if(voca[middle].equalsIgnoreCase(word2))
             return middle;
         else if(voca[middle].compareToIgnoreCase(word2) < 0)
