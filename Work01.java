@@ -82,17 +82,15 @@ public class Work01 {
     public static int find(int begin, int end, String word2) {
         
         int middle = (begin + end)/2;
-        if(begin <= end) {
+        if(end <= begin)
             return middle;
-            // System.out.println("Found " + num + " items.");
-        }
-        if(voca[middle].equals(word2))
+        if(voca[middle].equalsIgnoreCase(word2))
             return middle;
-        else if(voca[middle].compareTo(word2) < 0)
-            find(middle + 1, end, word2);
+        else if(voca[middle].compareToIgnoreCase(word2) < 0)
+            begin = middle + 1;
         else
-            find(begin, middle - 1, word2);
-        return -1;
+            end = middle - 1;
+        return find(begin, end, word2);
         
     }
     
