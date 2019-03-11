@@ -6,13 +6,14 @@ import java.util.Scanner;
 
 public class Work01 {
     
-    static int Max = 1000000;
-    static String command;
-    static String word;
-    static int count;
-    static String []voca;
-    static String []part;
-    static String []sub;
+    static int Max = 1000000; // 최대
+    static String command; // 명령어
+    static String word; // 찾을 단어
+    static int count; // 총단어수
+    static String []voca; // 단어모음
+    static String []part; // 품사모음
+    static String []sub; // 설명모음
+    static String []tmp; // 빈 칸, ' 지운 단어모음
     static String buffer;
     
     public static void main(String[] args) {
@@ -21,10 +22,11 @@ public class Work01 {
         voca = new String [Max];
         part = new String [Max];
         sub = new String [Max];
+        tmp = new String [Max];
         
         while(true){
             
-            System.out.print("$ ");
+            System.out.print("$" + " ");
             Scanner keyboard = new Scanner(System.in);
             
             command = keyboard.next();
@@ -36,12 +38,14 @@ public class Work01 {
                 System.out.println(count);
             }
             else if(command.equals("find")) {
-                word = keyboard.next();
+                word = keyboard.nextLine();
+                word = word.replaceAll(" ","");
+                word = word.replaceAll("'","");
                 int num = find(0,count-1,word);
-                if(voca[num].equalsIgnoreCase(word)) {
+                if(tmp[num].equalsIgnoreCase(word)) {
                     int buf = num;
                     int k = 0;
-                    while(voca[buf].equalsIgnoreCase(word)) {
+                    while(tmp[buf].equalsIgnoreCase(word)) {
                         if(buf == 0)
                             break;
                         buf--;
@@ -52,7 +56,7 @@ public class Work01 {
                     else
                         num = ++buf;
                     
-                    while(voca[buf].equalsIgnoreCase(word)) {
+                    while(tmp[buf].equalsIgnoreCase(word)) {
                         k++;
                         buf++;
                     }
@@ -83,13 +87,14 @@ public class Work01 {
                 int num1 = buffer.indexOf("(");
                 int num2 = buffer.indexOf(")");
                 
-                if(len == num2 + 1) {
+                if(len == num2 + 1)
                     voca[count] = buffer.substring(0);
-                }
                 else {
                     voca[count] = buffer.substring(0,num1-1);
                     part[count] = buffer.substring(num1,num2+1);
                     sub[count] = buffer.substring(num2+2);
+                    tmp[count] = voca[count].replaceAll(" ","");
+                    tmp[count] = tmp[count].replaceAll("'", "");
                 }
                 
                 if(inFile.hasNext()) {
@@ -111,9 +116,9 @@ public class Work01 {
         int middle = (begin + end)/2;
         if(end < begin)
             return end;
-        if(voca[middle].equalsIgnoreCase(word2))
+        if(tmp[middle].equalsIgnoreCase(word2))
             return middle;
-        else if(voca[middle].compareToIgnoreCase(word2) < 0)
+        else if(tmp[middle].compareToIgnoreCase(word2) < 0)
             begin = middle + 1;
         else
             end = middle - 1;
