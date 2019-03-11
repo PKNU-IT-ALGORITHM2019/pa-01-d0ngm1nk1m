@@ -15,6 +15,7 @@ public class Work01 {
     static String []sub; // 설명모음
     static String []tmp; // 빈 칸, ' 지운 단어모음
     static String buffer;
+    private static Scanner keyboard;
     
     public static void main(String[] args) {
         // TODO Auto-generated method stub
@@ -26,8 +27,8 @@ public class Work01 {
         
         while(true){
             
-            System.out.print("$" + " ");
-            Scanner keyboard = new Scanner(System.in);
+            System.out.print("$ ");
+            keyboard = new Scanner(System.in);
             
             command = keyboard.next();
             if(command.equals("read")) {
@@ -74,6 +75,7 @@ public class Work01 {
             else if(command.equals("exit"))
                 break;
         }
+        
     }
     
     
