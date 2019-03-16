@@ -9,11 +9,12 @@ public class Work01 {
     static int Max = 1000000; // 최대
     static String command; // 명령어
     static String word; // 찾을 단어
+    static String temp; // 빈 칸, ', - 지운 찾을 단어
     static int count; // 총단어수
     static String []voca; // 단어모음
     static String []part; // 품사모음
     static String []sub; // 설명모음
-    static String []tmp; // 빈 칸, ' 지운 단어모음
+    static String []tmp; // 빈 칸, ', - 지운 단어모음
     static String buffer;
     private static Scanner keyboard;
     
@@ -39,7 +40,7 @@ public class Work01 {
             else if(command.equals("find")) {
                 word = keyboard.nextLine();
                 word = word.substring(1);
-                String temp = word.replaceAll(" ","");
+                temp = word.replaceAll(" ","");
                 temp = temp.replaceAll("'","");
                 temp = temp.replaceAll("-","");
                 int num;
@@ -47,47 +48,10 @@ public class Work01 {
                 if(word.equalsIgnoreCase(temp)) // 하나의 단어로 구성된 경우
                     num = find_b(0,count-1,word);
                 else
-                    num = find_d(0,count-1,temp); // 두 개 이상의 단어로 구성된 경우
+                    num = find_d(0,count-1,temp); // 두 개 이상의 단어 혹은 특수문자로 구성된 경우
                 
-                if(voca[num].equalsIgnoreCase(word)) {
-                    int buf = num;
-                    int k = 0;
-                    while(voca[buf].equalsIgnoreCase(word)) {
-                        if(buf == 0)
-                            break;
-                        buf--;
-                    }
-                    if(buf == 0)
-                        num = buf;
-                    else
-                        num = ++buf;
-                    
-                    while(voca[buf].equalsIgnoreCase(word)) {
-                        k++;
-                        buf++;
-                    }
-                    System.out.println("Found " + k + " items.");
-                    for(int i = 0; i < k; i++)
-                        System.out.println(voca[num+i] + " " + part[num+i] + " " + sub[num+i]);
-                }
-                else if(tmp[num].equalsIgnoreCase(temp)) {
-                    int buf = num;
-                    while(tmp[buf].equalsIgnoreCase(word)) {
-                        if(buf == 0)
-                            break;
-                        buf--;
-                    }
-                    System.out.println("Not found.");
-                    System.out.println(voca[buf] + " " + part[buf]);
-                    System.out.println("- - -");
-                    System.out.println(voca[buf+1] + " " + part[buf+1]);
-                }
-                else {
-                    System.out.println("Not found.");
-                    System.out.println(voca[num] + " " + part[num]);
-                    System.out.println("- - -");
-                    System.out.println(voca[num+1] + " " + part[num+1]);
-                }
+                printWord(num);
+                
             }
             else if(command.equals("exit"))
                 break;
@@ -125,7 +89,6 @@ public class Work01 {
             System.out.println("No file");
             System.exit(9);
         }
-        
     }
     
     public static int find_b(int begin, int end, String word2) {
@@ -155,6 +118,59 @@ public class Work01 {
         else
             end = middle - 1;
         return find_d(begin, end, word2);
+        
+    }
+    
+    public static void printWord(int num) {
+        
+        if(voca[num].equalsIgnoreCase(word)) {
+            
+            int buf = num;
+            int k = 0;
+            
+            while(voca[buf].equalsIgnoreCase(word)) {
+                if(buf == 0)
+                    break;
+                buf--;
+            }
+            
+            if(buf == 0)
+                num = buf;
+            else
+                num = ++buf;
+            
+            while(voca[buf].equalsIgnoreCase(word)) {
+                k++;
+                buf++;
+            }
+            
+            System.out.println("Found " + k + " items.");
+            
+            for(int i = 0; i < k; i++)
+                System.out.println(voca[num+i] + " " + part[num+i] + " " + sub[num+i]);
+        }
+        else if(tmp[num].equalsIgnoreCase(temp)) {
+            
+            int buf = num;
+            
+            while(tmp[buf].equalsIgnoreCase(word)) {
+                if(buf == 0)
+                    break;
+                buf--;
+            }
+            printWordNotFound(buf);
+        }
+        else {
+            printWordNotFound(num);
+        }
+    }
+    
+    public static void printWordNotFound(int num) {
+        
+        System.out.println("Not found.");
+        System.out.println(voca[num] + " " + part[num]);
+        System.out.println("- - -");
+        System.out.println(voca[num+1] + " " + part[num+1]);
         
     }
 }
