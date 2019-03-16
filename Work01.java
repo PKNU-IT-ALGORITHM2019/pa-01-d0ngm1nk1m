@@ -38,31 +38,49 @@ public class Work01 {
                 System.out.println(count);
             else if(command.equals("find")) {
                 word = keyboard.nextLine();
-                word = word.replaceAll(" ","");
-                word = word.replaceAll("'","");
-                word = word.replaceAll("-","");
-                int num = find(0,count-1,word);
-                if(tmp[num].equalsIgnoreCase(word)) {
+                word = word.substring(1);
+                String temp = word.replaceAll(" ","");
+                temp = temp.replaceAll("'","");
+                temp = temp.replaceAll("-","");
+                int num;
+                
+                if(word.equalsIgnoreCase(temp)) // 하나의 단어로 구성된 경우
+                    num = find_b(0,count-1,word);
+                else
+                    num = find_d(0,count-1,temp); // 두 개 이상의 단어로 구성된 경우
+                
+                if(voca[num].equalsIgnoreCase(word)) {
                     int buf = num;
                     int k = 0;
-                    while(tmp[buf].equalsIgnoreCase(word)) {
+                    while(voca[buf].equalsIgnoreCase(word)) {
                         if(buf == 0)
                             break;
                         buf--;
                     }
-                    
                     if(buf == 0)
                         num = buf;
                     else
                         num = ++buf;
                     
-                    while(tmp[buf].equalsIgnoreCase(word)) {
+                    while(voca[buf].equalsIgnoreCase(word)) {
                         k++;
                         buf++;
                     }
                     System.out.println("Found " + k + " items.");
                     for(int i = 0; i < k; i++)
                         System.out.println(voca[num+i] + " " + part[num+i] + " " + sub[num+i]);
+                }
+                else if(tmp[num].equalsIgnoreCase(temp)) {
+                    int buf = num;
+                    while(tmp[buf].equalsIgnoreCase(word)) {
+                        if(buf == 0)
+                            break;
+                        buf--;
+                    }
+                    System.out.println("Not found.");
+                    System.out.println(voca[buf] + " " + part[buf]);
+                    System.out.println("- - -");
+                    System.out.println(voca[buf+1] + " " + part[buf+1]);
                 }
                 else {
                     System.out.println("Not found.");
@@ -110,7 +128,22 @@ public class Work01 {
         
     }
     
-    public static int find(int begin, int end, String word2) {
+    public static int find_b(int begin, int end, String word2) {
+        
+        int middle = (begin + end)/2;
+        if(end < begin)
+            return end;
+        if(voca[middle].equalsIgnoreCase(word2))
+            return middle;
+        else if(voca[middle].compareToIgnoreCase(word2) < 0)
+            begin = middle + 1;
+        else
+            end = middle - 1;
+        return find_b(begin, end, word2);
+        
+    }
+    
+    public static int find_d(int begin, int end, String word2) {
         
         int middle = (begin + end)/2;
         if(end < begin)
@@ -121,7 +154,7 @@ public class Work01 {
             begin = middle + 1;
         else
             end = middle - 1;
-        return find(begin, end, word2);
+        return find_d(begin, end, word2);
         
     }
 }
