@@ -9,12 +9,12 @@ public class Work01 {
     static int Max = 1000000; // 최대
     static String command; // 명령어
     static String word; // 찾을 단어
-    static String temp; // 빈 칸, ', - 지운 찾을 단어
+    static String word_t; // 빈 칸, ', - 지운 찾을 단어
     static int count; // 총단어수
     static String []voca; // 단어모음
     static String []part; // 품사모음
     static String []sub; // 설명모음
-    static String []tmp; // 빈 칸, ', - 지운 단어모음
+    static String []voca_t; // 빈 칸, ', - 지운 단어모음
     static String buffer;
     private static Scanner keyboard;
     
@@ -23,7 +23,7 @@ public class Work01 {
         voca = new String [Max];
         part = new String [Max];
         sub = new String [Max];
-        tmp = new String [Max];
+        voca_t = new String [Max];
         
         while(true){
             
@@ -40,15 +40,13 @@ public class Work01 {
             else if(command.equals("find")) {
                 word = keyboard.nextLine();
                 word = word.substring(1);
-                temp = word.replaceAll(" ","");
-                temp = temp.replaceAll("'","");
-                temp = temp.replaceAll("-","");
+                word_t = cleanup(word,word_t);
                 int num;
                 
-                if(word.equalsIgnoreCase(temp)) // 하나의 단어로 구성된 경우
-                    num = find_b(0,count-1,word);
-                else
-                    num = find_d(0,count-1,temp); // 두 개 이상의 단어 혹은 특수문자로 구성된 경우
+                if(word.equalsIgnoreCase(word_t)) // 하나의 단어로 구성된 경우
+                    num = find(0,count-1,word,voca);
+                else                                // 두 개 이상의 단어 혹은 특수문자로 구성된 경우
+                    num = find(0,count-1,word_t,voca_t);
                 
                 printWord(num);
                 
@@ -74,9 +72,7 @@ public class Work01 {
                     voca[count] = buffer.substring(0,num1-1);
                     part[count] = buffer.substring(num1,num2+1);
                     sub[count] = buffer.substring(num2+2);
-                    tmp[count] = voca[count].replaceAll(" ","");
-                    tmp[count] = tmp[count].replaceAll("'", "");
-                    tmp[count] = tmp[count].replaceAll("-", "");
+                    voca_t[count] = cleanup(voca[count],voca_t[count]);
                 }
                 
                 if(inFile.hasNext())
@@ -91,33 +87,26 @@ public class Work01 {
         }
     }
     
-    public static int find_b(int begin, int end, String word2) {
+    public static String cleanup(String str1, String str2) {
         
-        int middle = (begin + end)/2;
-        if(end < begin)
-            return end;
-        if(voca[middle].equalsIgnoreCase(word2))
-            return middle;
-        else if(voca[middle].compareToIgnoreCase(word2) < 0)
-            begin = middle + 1;
-        else
-            end = middle - 1;
-        return find_b(begin, end, word2);
-        
+        str2 = str1.replaceAll(" ","");
+        str2 = str2.replaceAll("'", "");
+        str2 = str2.replaceAll("-", "");
+        return str2;
     }
     
-    public static int find_d(int begin, int end, String word2) {
+    public static int find(int begin, int end, String target, String []string) {
         
         int middle = (begin + end)/2;
         if(end < begin)
             return end;
-        if(tmp[middle].equalsIgnoreCase(word2))
+        if(string[middle].equalsIgnoreCase(target))
             return middle;
-        else if(tmp[middle].compareToIgnoreCase(word2) < 0)
+        else if(string[middle].compareToIgnoreCase(target) < 0)
             begin = middle + 1;
         else
             end = middle - 1;
-        return find_d(begin, end, word2);
+        return find(begin, end, target, string);
         
     }
     
@@ -149,11 +138,11 @@ public class Work01 {
             for(int i = 0; i < k; i++)
                 System.out.println(voca[num+i] + " " + part[num+i] + " " + sub[num+i]);
         }
-        else if(tmp[num].equalsIgnoreCase(temp)) {
+        else if(voca_t[num].equalsIgnoreCase(word_t)) {
             
             int buf = num;
             
-            while(tmp[buf].equalsIgnoreCase(word)) {
+            while(voca_t[buf].equalsIgnoreCase(word_t)) {
                 if(buf == 0)
                     break;
                 buf--;
