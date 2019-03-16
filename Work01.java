@@ -18,7 +18,6 @@ public class Work01 {
     private static Scanner keyboard;
     
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
         
         voca = new String [Max];
         part = new String [Max];
@@ -35,13 +34,13 @@ public class Work01 {
                 word = keyboard.next();
                 read(word);
             }
-            else if(command.equals("size")) {
+            else if(command.equals("size"))
                 System.out.println(count);
-            }
             else if(command.equals("find")) {
                 word = keyboard.nextLine();
                 word = word.replaceAll(" ","");
                 word = word.replaceAll("'","");
+                word = word.replaceAll("-","");
                 int num = find(0,count-1,word);
                 if(tmp[num].equalsIgnoreCase(word)) {
                     int buf = num;
@@ -75,9 +74,7 @@ public class Work01 {
             else if(command.equals("exit"))
                 break;
         }
-        
     }
-    
     
     public static void read(String word2) {
         try {
@@ -97,11 +94,11 @@ public class Work01 {
                     sub[count] = buffer.substring(num2+2);
                     tmp[count] = voca[count].replaceAll(" ","");
                     tmp[count] = tmp[count].replaceAll("'", "");
+                    tmp[count] = tmp[count].replaceAll("-", "");
                 }
                 
-                if(inFile.hasNext()) {
+                if(inFile.hasNext())
                     buffer = inFile.nextLine();
-                }
                 count++;
             }
             
@@ -127,5 +124,4 @@ public class Work01 {
         return find(begin, end, word2);
         
     }
-    
 }
