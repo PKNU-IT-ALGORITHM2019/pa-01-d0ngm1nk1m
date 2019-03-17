@@ -38,8 +38,7 @@ public class Work01 {
             else if(command.equals("size"))
                 System.out.println(count);
             else if(command.equals("find")) {
-                word = keyboard.nextLine();
-                word = word.trim();
+                word = keyboard.nextLine().trim();
                 word_t = cleanup(word,word_t);
                 int num;
                 
@@ -88,9 +87,7 @@ public class Work01 {
     
     public static String cleanup(String str1, String str2) {
         
-        str2 = str1.replaceAll(" ","");
-        str2 = str2.replaceAll("'", "");
-        str2 = str2.replaceAll("-", "");
+        str2 = str1.replaceAll(" ","").replaceAll("'", "").replaceAll("-", "");
         return str2;
     }
     
