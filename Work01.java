@@ -7,10 +7,10 @@ import java.util.Scanner;
 public class Work01 {
     
     static int Max = 1000000; // 최대
+    static int count; // 총단어수
     static String command; // 명령어
     static String word; // 찾을 단어
     static String word_t; // 빈 칸, ', - 지운 찾을 단어
-    static int count; // 총단어수
     static String []voca; // 단어모음
     static String []part; // 품사모음
     static String []sub; // 설명모음
@@ -39,7 +39,7 @@ public class Work01 {
                 System.out.println(count);
             else if(command.equals("find")) {
                 word = keyboard.nextLine();
-                word = word.substring(1);
+                word = word.trim();
                 word_t = cleanup(word,word_t);
                 int num;
                 
@@ -49,7 +49,6 @@ public class Work01 {
                     num = find(0,count-1,word_t,voca_t);
                 
                 printWord(num);
-                
             }
             else if(command.equals("exit"))
                 break;
@@ -149,9 +148,8 @@ public class Work01 {
             }
             printWordNotFound(buf);
         }
-        else {
+        else
             printWordNotFound(num);
-        }
     }
     
     public static void printWordNotFound(int num) {
