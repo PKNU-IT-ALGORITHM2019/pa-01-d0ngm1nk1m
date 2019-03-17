@@ -95,7 +95,10 @@ public class Work01 {
         
         int middle = (begin + end)/2;
         if(end < begin)
-            return end;
+            if(end < 0)
+                return -1;
+            else
+                return end;
         if(string[middle].equalsIgnoreCase(target))
             return middle;
         else if(string[middle].compareToIgnoreCase(target) < 0)
